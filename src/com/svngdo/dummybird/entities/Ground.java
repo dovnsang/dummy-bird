@@ -22,7 +22,7 @@ public class Ground extends GameObject {
     }
 
     public void init() {
-        velX = 3;
+        velX = Game.SPEED;
         x1 = 0;
         x2 = Game.WIDTH;
     }

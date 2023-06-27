@@ -16,7 +16,7 @@ public class PipeManager {
 
     public static void spawn() {
         Random random = new Random();
-        int spacing = 180;
+        int spacing = 160;
         int minHeight = 90;
         int maxHeight = 360;
         int randomHeight = random.nextInt((maxHeight - minHeight) + 1) + minHeight;

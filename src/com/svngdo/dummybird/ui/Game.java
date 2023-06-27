@@ -2,10 +2,7 @@ package com.svngdo.dummybird.ui;
 
 import com.svngdo.dummybird.entities.Bird;
 import com.svngdo.dummybird.entities.Ground;
-import com.svngdo.dummybird.graphics.Background;
-import com.svngdo.dummybird.graphics.GameOver;
-import com.svngdo.dummybird.graphics.RestartButton;
-import com.svngdo.dummybird.graphics.Welcome;
+import com.svngdo.dummybird.graphics.*;
 import com.svngdo.dummybird.input.GameInput;
 import com.svngdo.dummybird.utils.ObjectManager;
 import com.svngdo.dummybird.utils.PipeManager;
@@ -16,6 +13,7 @@ import java.awt.image.BufferStrategy;
 public class Game extends Canvas implements Runnable {
     public static final int WIDTH = 432;
     public static final int HEIGHT = 768;
+    public static final float SPEED = 3.0f;
     public static final float GRAVITY = 0.53f;
     public static final String IMAGE_PATH = "src/resources/sprites/";
 
@@ -24,6 +22,7 @@ public class Game extends Canvas implements Runnable {
     public static boolean over;
     public static Bird bird;
     public static RestartButton restartButton;
+    public static Score score;
 
     private Thread thread;
     private BufferStrategy bufferStrategy;
@@ -47,8 +46,10 @@ public class Game extends Canvas implements Runnable {
         Ground ground = new Ground();
         restartButton = new RestartButton();
         bird = new Bird();
+        score = new Score();
 
         ObjectManager.background.add(background);
+        ObjectManager.characters.add(score);
         ObjectManager.characters.add(bird);
         ObjectManager.characters.add(ground);
         ObjectManager.foreground.add(welcome);
@@ -82,9 +83,10 @@ public class Game extends Canvas implements Runnable {
         ObjectManager.clearPipes();
         PipeManager.init();
         bird.init();
-        
+
         start = false;
         over = false;
+        score.setValue(0);
     }
 
     public void update() {
@@ -131,7 +133,7 @@ public class Game extends Canvas implements Runnable {
 
             // Display FPS
             if (System.currentTimeMillis() - fpsTimer > 1000) {
-                System.out.println("FPS = " + fps);
+//                System.out.println("FPS = " + fps);
                 fpsTimer += 1000;
                 fps = 0;
             }
