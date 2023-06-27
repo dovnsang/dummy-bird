@@ -12,6 +12,10 @@ public class ObjectManager {
     public static List<GameObject>  pipes = new LinkedList<>();
     public static List<GameObject> foreground = new LinkedList<>();
 
+    public static void clearPipes() {
+        pipes.clear();
+    }
+
     public static void update() {
         for (GameObject o : background) {
             o.update();

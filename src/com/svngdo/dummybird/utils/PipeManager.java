@@ -10,6 +10,10 @@ public class PipeManager {
     private static final int DELAY = 2000; // millisecond
     private static long lastSpawnTime = 0;
 
+    public static void init() {
+        lastSpawnTime = 0;
+    }
+
     public static void spawn() {
         Random random = new Random();
         int spacing = 180;
@@ -34,5 +38,4 @@ public class PipeManager {
             }
         }
     }
-
 }

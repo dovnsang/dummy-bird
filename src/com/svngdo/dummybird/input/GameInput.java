@@ -8,7 +8,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class InputManager implements MouseListener, KeyListener {
+public class GameInput implements MouseListener, KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -21,7 +21,10 @@ public class InputManager implements MouseListener, KeyListener {
             if (!Game.start) {
                 Game.start = true;
             }
-            goUp();
+            if (Game.over) {
+                Game.restart();
+            }
+            Game.bird.flyUp();
         }
     }
 
@@ -39,11 +42,15 @@ public class InputManager implements MouseListener, KeyListener {
     public void mousePressed(MouseEvent e) {
         // Handle get ready screen click
         if (e.getButton() == MouseEvent.BUTTON1) {
-            if (!Game.start
-                    && ObjectUtils.checkCollision(e.getX(), e.getY(), 0, 0, Game.WIDTH, Game.HEIGHT)) {
+            if (!Game.start) {
                 Game.start = true;
             }
-            goUp();
+            if (Game.over) {
+                if (ObjectUtils.checkCollision(e.getX(), e.getY(), Game.restartButton)) {
+                    Game.restart();
+                }
+            }
+            Game.bird.flyUp();
         }
     }
 
@@ -62,9 +69,4 @@ public class InputManager implements MouseListener, KeyListener {
 
     }
 
-    public void goUp() {
-        if (!Game.over) {
-            Game.bird.setVelY(-10);
-        }
-    }
 }

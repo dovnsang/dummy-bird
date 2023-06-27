@@ -2,8 +2,11 @@ package com.svngdo.dummybird.ui;
 
 import com.svngdo.dummybird.entities.Bird;
 import com.svngdo.dummybird.entities.Ground;
-import com.svngdo.dummybird.graphics.*;
-import com.svngdo.dummybird.input.InputManager;
+import com.svngdo.dummybird.graphics.Background;
+import com.svngdo.dummybird.graphics.GameOver;
+import com.svngdo.dummybird.graphics.RestartButton;
+import com.svngdo.dummybird.graphics.Welcome;
+import com.svngdo.dummybird.input.GameInput;
 import com.svngdo.dummybird.utils.ObjectManager;
 import com.svngdo.dummybird.utils.PipeManager;
 
@@ -20,6 +23,7 @@ public class Game extends Canvas implements Runnable {
     public static boolean start;
     public static boolean over;
     public static Bird bird;
+    public static RestartButton restartButton;
 
     private Thread thread;
     private BufferStrategy bufferStrategy;
@@ -33,14 +37,15 @@ public class Game extends Canvas implements Runnable {
         createBufferStrategy(3);
         bufferStrategy = getBufferStrategy();
 
-        InputManager inputManager = new InputManager();
-        addKeyListener(inputManager);
-        addMouseListener(inputManager);
+        GameInput gameInput = new GameInput();
+        addKeyListener(gameInput);
+        addMouseListener(gameInput);
 
         Background background = new Background();
         Welcome welcome = new Welcome();
         GameOver gameOver = new GameOver();
         Ground ground = new Ground();
+        restartButton = new RestartButton();
         bird = new Bird();
 
         ObjectManager.background.add(background);
@@ -48,6 +53,7 @@ public class Game extends Canvas implements Runnable {
         ObjectManager.characters.add(ground);
         ObjectManager.foreground.add(welcome);
         ObjectManager.foreground.add(gameOver);
+        ObjectManager.foreground.add(restartButton);
 
         requestFocus();
     }
@@ -55,9 +61,7 @@ public class Game extends Canvas implements Runnable {
     // synchronized to ensure running variable atomically
     public synchronized void start() {
         if (running) return;
-        start = false;
         running = true;
-        over = false;
 
         thread = new Thread(this);
         thread.start();
@@ -72,6 +76,15 @@ public class Game extends Canvas implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void restart() {
+        ObjectManager.clearPipes();
+        PipeManager.init();
+        bird.init();
+        
+        start = false;
+        over = false;
     }
 
     public void update() {

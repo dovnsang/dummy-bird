@@ -29,6 +29,8 @@ public class Bird extends GameObject {
     }
 
     public void init() {
+        x = (Game.WIDTH - WIDTH) / 2;
+        y = (Game.HEIGHT - HEIGHT) / 2 - 1;
         animationDelay = 300;
         lastAnimationTime = 0;
         velY = 0;
@@ -44,6 +46,12 @@ public class Bird extends GameObject {
         }
         if (currentImage >= images.length) {
             currentImage = 0;
+        }
+    }
+
+    public void flyUp() {
+        if (!Game.over) {
+            velY = -10;
         }
     }
 
@@ -85,10 +93,6 @@ public class Bird extends GameObject {
         if (Game.start) {
             g.drawImage(images[currentImage], x, y, null);
         }
-    }
-
-    public void setVelY(float velY) {
-        this.velY = velY;
     }
 
 }
