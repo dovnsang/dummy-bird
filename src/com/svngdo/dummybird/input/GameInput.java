@@ -25,6 +25,7 @@ public class GameInput implements MouseListener, KeyListener {
                 Game.restart();
             }
             Game.bird.flyUp();
+            Game.bird.setFlapDelay(10);
         }
     }
 
@@ -51,6 +52,7 @@ public class GameInput implements MouseListener, KeyListener {
                 }
             }
             Game.bird.flyUp();
+            Game.bird.setFlapDelay(10);
         }
     }
 

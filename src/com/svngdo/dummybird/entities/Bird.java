@@ -15,8 +15,8 @@ public class Bird extends GameObject {
     private BufferedImage[] images;
     private float velY;
     public float maxSpeed;
-    private int animationDelay;
     private int currentImage;
+    private int flapDelay;
     private long lastAnimationTime;
 
     public Bird() {
@@ -31,7 +31,7 @@ public class Bird extends GameObject {
     public void init() {
         x = (Game.WIDTH - WIDTH) / 2;
         y = (Game.HEIGHT - HEIGHT) / 2 - 1;
-        animationDelay = 300;
+        flapDelay = 300;
         lastAnimationTime = 0;
         velY = 0;
         maxSpeed = 10f;
@@ -40,7 +40,7 @@ public class Bird extends GameObject {
 
     public void flap() {
         long elapsedTime = (System.nanoTime() - lastAnimationTime) / 1_000_000; // convert nanosecond to millisecond
-        if (elapsedTime > animationDelay) {
+        if (elapsedTime > flapDelay) {
             ++currentImage;
             lastAnimationTime = System.nanoTime();
         }
@@ -59,15 +59,29 @@ public class Bird extends GameObject {
     public void update() {
         int groundY = Game.HEIGHT - Ground.HEIGHT;
 
+        // Flap animation
         if (!Game.over) {
             flap();
         }
 
+        // Make the bird falling
         if (Game.start) {
             velY += Game.GRAVITY;
             y += velY;
         }
 
+        // Balance the flap when falling
+        if (flapDelay < 300) {
+            flapDelay += 3;
+        }
+
+        // Sky limit
+        if (y < 0) {
+            velY = 0;
+            y = 0;
+        }
+
+        // Ground limit
         if (y + height > groundY) {
             velY = 0;
             y = groundY - height;
@@ -82,10 +96,6 @@ public class Bird extends GameObject {
             }
         }
 
-        if (y < 0) {
-            velY = 0;
-            y = 0;
-        }
     }
 
     @Override
@@ -93,6 +103,10 @@ public class Bird extends GameObject {
         if (Game.start) {
             g.drawImage(images[currentImage], x, y, null);
         }
+    }
+
+    public void setFlapDelay(int flapDelay) {
+        this.flapDelay = flapDelay;
     }
 
 }
